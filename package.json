@@ -6,8 +6,7 @@
   "scripts": {
     "test": "ts-node --transpile-only __test__/index.ts",
     "clean": "rimraf dist/*",
-    "build": "npm run clean && tsc && gulp bundle && rimraf dist/src",
-    "prepublishOnly": "npm run build"
+    "build": "npm run clean && tsc && gulp bundle && rimraf dist/src"
   },
   "keywords": [
     "node",
