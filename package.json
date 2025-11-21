@@ -6,7 +6,8 @@
   "scripts": {
     "test": "ts-node --transpile-only __test__/index.ts",
     "clean": "rimraf dist/*",
-    "build": "npm run clean && tsc && gulp bundle && rimraf dist/src"
+    "build": "npm run clean && tsc && gulp bundle && rimraf dist/src",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "node",
@@ -19,6 +20,19 @@
   ],
   "author": "Luong Phung<luonguit@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheyenne-team/node-pdf-report.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cheyenne-team/node-pdf-report/issues"
+  },
+  "homepage": "https://github.com/cheyenne-team/node-pdf-report#readme",
+  "files": [
+    "lib/",
+    "themes/",
+    "README.md"
+  ],
   "dependencies": {
     "ejs": "^3.1.3",
     "puppeteer": "^2.0.0",

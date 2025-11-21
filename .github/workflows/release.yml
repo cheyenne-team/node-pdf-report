@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: 'Create as draft release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run build
+        run: npm run build
+
+      - name: Create package tarball
+        run: npm pack
+
+      - name: Get package version
+        id: package-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "tarball=$PACKAGE_NAME-$VERSION.tgz" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.package-version.outputs.tag }}
+          release_name: Release ${{ steps.package-version.outputs.version }}
+          draft: ${{ inputs.draft }}
+          prerelease: false
+          body: |
+            ## Release ${{ steps.package-version.outputs.version }}
+
+            ### Installation
+
+            Download the package:
+            ```bash
+            curl -LO https://github.com/${{ github.repository }}/releases/download/${{ steps.package-version.outputs.tag }}/${{ steps.package-version.outputs.tarball }}
+            ```
+
+            Or install from tarball:
+            ```bash
+            npm install https://github.com/${{ github.repository }}/releases/download/${{ steps.package-version.outputs.tag }}/${{ steps.package-version.outputs.tarball }}
+            ```
+
+            ### Changes
+
+            See commits since last release for details.
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ steps.package-version.outputs.tarball }}
+          asset_name: ${{ steps.package-version.outputs.tarball }}
+          asset_content_type: application/gzip
+
+      - name: Output release info
+        run: |
+          echo "✅ Release created successfully!"
+          echo "📦 Version: ${{ steps.package-version.outputs.version }}"
+          echo "🏷️  Tag: ${{ steps.package-version.outputs.tag }}"
+          echo "📥 Download URL: https://github.com/${{ github.repository }}/releases/download/${{ steps.package-version.outputs.tag }}/${{ steps.package-version.outputs.tarball }}"
