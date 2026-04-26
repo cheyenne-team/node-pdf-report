@@ -6,6 +6,6 @@ export declare class Html2Pdf {
     constructor(options?: PdfOptions);
     _initBrowser(): Promise<void>;
     createPdf(html: string): Promise<Buffer>;
-    release(): void;
+    release(): Promise<void>;
 }
 export declare function html2Pdf(html: string): void;
