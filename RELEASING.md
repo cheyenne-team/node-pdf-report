@@ -65,7 +65,7 @@ You can also trigger the workflow manually from the GitHub Actions tab:
 
 | Aspect | Configuration |
 |--------|---------------|
-| **Runner** | Self-hosted |
+| **Runner** | GitHub-hosted (`ubuntu-latest`) |
 | **Trigger** | `push` of tag matching `v*` (automatic) + `workflow_dispatch` (manual) |
 | **Version source** | `package.json` `version` field |
 | **Tag format** | `v{version}` (e.g., `v1.2.0`) |
