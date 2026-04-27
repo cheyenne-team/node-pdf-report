@@ -13,9 +13,19 @@ Nodejs export pdf report from base html templates!
 
 [![nodejs-pdf-report](https://nodei.co/npm/nodejs-pdf-report.png)](https://npmjs.org/package/nodejs-pdf-report)
 
+### From npm registry
+
 ```
 npm install --save nodejs-pdf-report
 ```
+
+### From GitHub Releases
+
+```bash
+npm install https://github.com/cheyenne-team/node-pdf-report/releases/download/v1.1.7/nodejs-pdf-report-1.1.7.tgz
+```
+
+> Replace `v1.1.7` with the desired version. See [all releases](https://github.com/cheyenne-team/node-pdf-report/releases).
 
 ## Supports
 
@@ -111,6 +121,10 @@ const reportOptions: ReportOptions = {
 | styles         | string[]                   | []      | Style paths            |
 | scripts        | string[]                   | []      | Scripts paths          |
 | data           | object                     | {}      | Report data            |
+
+## Releases
+
+Versioned releases are published automatically via GitHub Actions when a matching tag is pushed. See [RELEASING.md](./RELEASING.md) for the full release process.
 
 ## License
 

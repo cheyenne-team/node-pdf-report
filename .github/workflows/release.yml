@@ -1,6 +1,9 @@
 name: Release
 
 on:
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
     inputs:
       draft:
@@ -11,7 +14,7 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
 
@@ -24,61 +27,74 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Create package tarball
-        run: npm pack
-
-      - name: Get package version
-        id: package-version
+      - name: Get package metadata
+        id: meta
         run: |
           VERSION=$(node -p "require('./package.json').version")
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
           echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
           echo "tarball=$PACKAGE_NAME-$VERSION.tgz" >> $GITHUB_OUTPUT
 
+      - name: Validate tag matches package version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          PKG_VERSION="${{ steps.meta.outputs.version }}"
+          if [ "v$PKG_VERSION" != "$TAG_NAME" ]; then
+            echo "::error::Tag '$TAG_NAME' does not match package.json version '$PKG_VERSION' (expected tag: v$PKG_VERSION)"
+            exit 1
+          fi
+          echo "✅ Tag '$TAG_NAME' matches package.json version '$PKG_VERSION'"
+
+      - name: Create package tarball
+        run: npm pack
+
       - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.package-version.outputs.tag }}
-          release_name: Release ${{ steps.package-version.outputs.version }}
-          draft: ${{ inputs.draft }}
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: Release ${{ steps.meta.outputs.version }}
+          draft: ${{ github.event_name == 'workflow_dispatch' && inputs.draft || false }}
           prerelease: false
+          files: ./${{ steps.meta.outputs.tarball }}
           body: |
-            ## Release ${{ steps.package-version.outputs.version }}
+            ## Release ${{ steps.meta.outputs.version }}
 
             ### Installation
 
             Download the package:
             ```bash
-            curl -LO https://github.com/${{ github.repository }}/releases/download/${{ steps.package-version.outputs.tag }}/${{ steps.package-version.outputs.tarball }}
+            curl -LO https://github.com/${{ github.repository }}/releases/download/${{ steps.meta.outputs.tag }}/${{ steps.meta.outputs.tarball }}
             ```
 
             Or install from tarball:
             ```bash
-            npm install https://github.com/${{ github.repository }}/releases/download/${{ steps.package-version.outputs.tag }}/${{ steps.package-version.outputs.tarball }}
+            npm install https://github.com/${{ github.repository }}/releases/download/${{ steps.meta.outputs.tag }}/${{ steps.meta.outputs.tarball }}
             ```
 
             ### Changes
 
             See commits since last release for details.
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.package-version.outputs.tarball }}
-          asset_name: ${{ steps.package-version.outputs.tarball }}
-          asset_content_type: application/gzip
 
-      - name: Output release info
-        run: |
-          echo "✅ Release created successfully!"
-          echo "📦 Version: ${{ steps.package-version.outputs.version }}"
-          echo "🏷️  Tag: ${{ steps.package-version.outputs.tag }}"
-          echo "📥 Download URL: https://github.com/${{ github.repository }}/releases/download/${{ steps.package-version.outputs.tag }}/${{ steps.package-version.outputs.tarball }}"
+      - name: Notify success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GH_WEBHOOK_URL }}
+
+      - name: Notify failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          text: "Release failed! Check logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GH_WEBHOOK_URL }}
