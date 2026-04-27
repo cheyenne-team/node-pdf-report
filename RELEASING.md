@@ -46,8 +46,6 @@ That's it! Pushing the tag automatically triggers the release workflow. The work
 - Validate the tag matches `package.json` version
 - Create the package tarball (`npm pack`)
 - Create a GitHub Release with the `.tgz` asset
-- Send a Slack notification to `#gh-actions`
-
 ### Manual Trigger (Alternative)
 
 You can also trigger the workflow manually from the GitHub Actions tab:
@@ -70,7 +68,6 @@ You can also trigger the workflow manually from the GitHub Actions tab:
 | **Version source** | `package.json` `version` field |
 | **Tag format** | `v{version}` (e.g., `v1.2.0`) |
 | **Output** | `.tgz` tarball uploaded as GitHub Release asset |
-| **Notifications** | Slack `#gh-actions` channel on success and failure |
 
 ## Using the Release
 
