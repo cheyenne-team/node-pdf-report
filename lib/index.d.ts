@@ -52,7 +52,7 @@ export interface ReportOptions {
 export declare class HtmlReport {
     private _parser;
     createPdf(options: ReportOptions): Promise<Buffer>;
-    release(): void;
+    release(): Promise<void>;
     _$loadReportTemplate(data: any, absoluteTemplateUrl: any, rawTemplate?: any): Promise<string>;
     _$loadReportStyles({ styles }: {
         styles: any;

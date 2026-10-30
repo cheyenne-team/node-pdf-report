@@ -27,11 +27,19 @@ npm install https://github.com/cheyenne-team/node-pdf-report/releases/download/v
 
 > Replace `v1.1.7` with the desired version. See [all releases](https://github.com/cheyenne-team/node-pdf-report/releases).
 
+### Requirements
+
+- Node.js 22.12 or newer.
+- `unzip` when installing: puppeteer downloads Chrome Headless Shell during `npm install`. If `unzip` is missing the install still succeeds, but without a browser.
+- The full Chrome is not used. Set `PUPPETEER_CHROME_SKIP_DOWNLOAD=true` to skip its download.
+
 ## Supports
 
 - Base html template with [EJS](https://github.com/mde/ejs) engine.
 - Embeded [Chart.js v2.9.3](https://www.chartjs.org).
 - Server side without browser.
+
+JavaScript is disabled while rendering: `scripts`, `rawScripts` and the Chart.js script added by `useChartJs` don't run.
 
 ## Examples
 

@@ -27,6 +27,9 @@
     "url": "https://github.com/cheyenne-team/node-pdf-report/issues"
   },
   "homepage": "https://github.com/cheyenne-team/node-pdf-report#readme",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "files": [
     "lib/",
     "themes/",
@@ -34,8 +37,7 @@
   ],
   "dependencies": {
     "ejs": "^3.1.3",
-    "puppeteer": "^2.0.0",
-    "uuid": "8.2.0"
+    "puppeteer": "^25.16.0"
   },
   "devDependencies": {
     "@types/ejs": "^3.0.4",
