@@ -32,6 +32,7 @@ npm install https://github.com/cheyenne-team/node-pdf-report/releases/download/v
 - Node.js 22.12 or newer.
 - `unzip` when installing: puppeteer downloads Chrome Headless Shell during `npm install`. If `unzip` is missing the install still succeeds, but without a browser.
 - The full Chrome is not used. Set `PUPPETEER_CHROME_SKIP_DOWNLOAD=true` to skip its download.
+- To pin the Chrome Headless Shell version, set the same version in `chrome.version` and `chrome-headless-shell.version` of the puppeteer configuration (or `PUPPETEER_CHROME_VERSION` and `PUPPETEER_CHROME_HEADLESS_SHELL_VERSION`): puppeteer downloads with the second one and looks the binary up with the first one.
 
 ## Supports
 
