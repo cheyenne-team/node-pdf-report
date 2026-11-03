@@ -42,6 +42,8 @@ npm install https://github.com/cheyenne-team/node-pdf-report/releases/download/v
 
 JavaScript is disabled while rendering: `scripts`, `rawScripts` and the Chart.js script added by `useChartJs` don't run.
 
+The lengths in `px`, `pt`, `pc`, `in`, `cm`, `mm` and `rem` of the header and footer templates are multiplied by 4/3 before rendering, so templates made for 1.1.7 (Chromium 80) keep their size. Percentages, `em` and images without an explicit size are not scaled, and the values of `src`, `href` and `url()` are left as they are.
+
 ## Examples
 
 - Import from package
