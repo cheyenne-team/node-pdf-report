@@ -21,3 +21,6 @@ export interface PdfOptions {
     tagged?: boolean;
     timeout?: number;
 }
+export interface PdfBrowser {
+    close(): Promise<void>;
+}

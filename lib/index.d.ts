@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { PdfOptions } from "./exporters";
+import { PdfBrowser, PdfOptions } from "./exporters";
 import { ReportData } from "./parsers";
 export * from "./exporters";
 export * from "./parsers";
@@ -51,6 +51,8 @@ export interface ReportOptions {
 }
 export declare class HtmlReport {
     private _parser;
+    private _browser;
+    constructor(browser?: PdfBrowser);
     createPdf(options: ReportOptions): Promise<Buffer>;
     release(): Promise<void>;
     _$loadReportTemplate(data: any, absoluteTemplateUrl: any, rawTemplate?: any): Promise<string>;
