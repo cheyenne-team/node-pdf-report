@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { PdfBrowser, PdfOptions } from "./types";
+import { PdfBrowser, PdfOptions } from "./types.js";
 export declare class Html2Pdf {
     private _browser;
     private _externalBrowser;

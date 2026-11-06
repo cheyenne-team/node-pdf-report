@@ -2,7 +2,16 @@
   "name": "nodejs-pdf-report",
   "version": "1.1.8",
   "description": "nodejs server export pdf from base html template",
+  "type": "module",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "test": "ts-node --transpile-only __test__/index.ts",
     "clean": "rimraf dist/*",

@@ -1,8 +1,8 @@
 /// <reference types="node" />
-import { PdfBrowser, PdfOptions } from "./exporters";
-import { ReportData } from "./parsers";
-export * from "./exporters";
-export * from "./parsers";
+import { PdfBrowser, PdfOptions } from "./exporters/index.js";
+import { ReportData } from "./parsers/index.js";
+export * from "./exporters/index.js";
+export * from "./parsers/index.js";
 export interface ReportOptions {
     title: string;
     useChartJs: boolean;
