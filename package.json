@@ -1,8 +1,17 @@
 {
   "name": "nodejs-pdf-report",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "nodejs server export pdf from base html template",
+  "type": "module",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "test": "ts-node --transpile-only __test__/index.ts",
     "clean": "rimraf dist/*",
@@ -27,6 +36,9 @@
     "url": "https://github.com/cheyenne-team/node-pdf-report/issues"
   },
   "homepage": "https://github.com/cheyenne-team/node-pdf-report#readme",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "files": [
     "lib/",
     "themes/",
@@ -34,8 +46,7 @@
   ],
   "dependencies": {
     "ejs": "^3.1.3",
-    "puppeteer": "^2.0.0",
-    "uuid": "8.2.0"
+    "puppeteer": "25.16.0"
   },
   "devDependencies": {
     "@types/ejs": "^3.0.4",

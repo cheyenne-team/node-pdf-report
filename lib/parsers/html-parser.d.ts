@@ -1,4 +1,4 @@
-import { ParserData, ParserOptions } from "./types";
+import { ParserData, ParserOptions } from "./types.js";
 export declare class HtmlParser {
     private _options;
     constructor(options?: ParserOptions);

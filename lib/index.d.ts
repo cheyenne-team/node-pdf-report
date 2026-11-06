@@ -1,8 +1,8 @@
 /// <reference types="node" />
-import { PdfOptions } from "./exporters";
-import { ReportData } from "./parsers";
-export * from "./exporters";
-export * from "./parsers";
+import { PdfBrowser, PdfOptions } from "./exporters/index.js";
+import { ReportData } from "./parsers/index.js";
+export * from "./exporters/index.js";
+export * from "./parsers/index.js";
 export interface ReportOptions {
     title: string;
     useChartJs: boolean;
@@ -51,8 +51,10 @@ export interface ReportOptions {
 }
 export declare class HtmlReport {
     private _parser;
+    private _browser;
+    constructor(browser?: PdfBrowser);
     createPdf(options: ReportOptions): Promise<Buffer>;
-    release(): void;
+    release(): Promise<void>;
     _$loadReportTemplate(data: any, absoluteTemplateUrl: any, rawTemplate?: any): Promise<string>;
     _$loadReportStyles({ styles }: {
         styles: any;

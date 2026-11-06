@@ -1,2 +1,2 @@
-export * from "./types";
-export * from "./html-parser";
+export * from "./types.js";
+export * from "./html-parser.js";
